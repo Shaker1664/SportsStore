@@ -81,35 +81,36 @@ namespace SportsStore.Tests
 
             var urlHelperFactory = new Mock<IUrlHelperFactory>();
             urlHelperFactory.Setup(f =>
-            f.GetUrlHelper(It.IsAny<ActionContext>()))
-                .Returns(urlHelper.Object);
+                f.GetUrlHelper(It.IsAny<ActionContext>()))
+                    .Returns(urlHelper.Object);
 
-            PageLinkTagHelper helper = new PageLinkTagHelper(urlHelperFactory.Object)
-            {
-                PageModel = new ViewModels.PagingInfo
+            PageLinkTagHelper helper =
+                new PageLinkTagHelper(urlHelperFactory.Object)
                 {
-                    CurrentPage = 2,
-                    TotalItems = 28,
-                    ItemsPerPage = 10
-                },
-                PageAction = "Test"
-            };
-            TagHelperContext context = new TagHelperContext(
+                    PageModel = new PagingInfo
+                    {
+                        CurrentPage = 2,
+                        TotalItems = 28,
+                        ItemsPerPage = 10
+                    },
+                    PageAction = "Test"
+                };
+            TagHelperContext ctx = new TagHelperContext(
                 new TagHelperAttributeList(),
-                new Dictionary<object, object>(),"");
+                new Dictionary<object, object>(), "");
             var content = new Mock<TagHelperContent>();
-            TagHelperOutput helperOutput = new TagHelperOutput("div",
+            TagHelperOutput output = new TagHelperOutput("div",
                 new TagHelperAttributeList(),
                 (cache, encoder) => Task.FromResult(content.Object));
 
             //Act
-            helper.Process(context, helperOutput);
+            helper.Process(ctx, output);
 
-            //Assert
+            // Assert
             Assert.Equal(@"<a href=""Test/Page1"">1</a>"
-                + @"<a href=""Test/Page2"">2</a>"
-                + @"<a href=""Test/Page3"">3</a>",
-                helperOutput.Content.GetContent());
+                    + @"<a href=""Test/Page2"">2</a>"
+                    + @"<a href=""Test/Page3"">3</a>",
+                    output.Content.GetContent());
         }
 
         [Fact]
@@ -152,7 +153,7 @@ namespace SportsStore.Tests
             }).AsQueryable<Product>());
 
             HomeController controller = new HomeController(mock.Object);
-            controller.PageSize = 2;
+            controller.PageSize = 4;
 
             //Act
             Product[] products = ((controller.Index("Cat2",1) as ViewResult)
@@ -161,7 +162,7 @@ namespace SportsStore.Tests
             //Assert
             Assert.Equal(2, products.Length);
             Assert.True(products[0].Name == "P2" && products[0].Category == "Cat2");
-            Assert.True(products[0].Name == "P4" && products[0].Category == "Cat2");
+            Assert.True(products[1].Name == "P4" && products[0].Category == "Cat2");
         }
     }
 }
