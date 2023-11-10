@@ -11,12 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.ConfigureDatabase(builder.Configuration);
 builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddRazorPages();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
 app.UseStatusCodePages();
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
@@ -37,6 +41,7 @@ app.UseEndpoints(endpoints =>
         new { Controller="Home", action = "Index", productPage = 1 });
 
     endpoints.MapDefaultControllerRoute();
+    endpoints.MapRazorPages();
 });
 
 SeedData.EnsurePopulated(app);
