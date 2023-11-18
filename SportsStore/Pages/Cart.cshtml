@@ -12,12 +12,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var line in Model.Cart.Lines)
-        {
+        @foreach (var line in Model.Cart.Lines) {
             <tr>
                 <td class="text-center">@line.Quantity</td>
                 <td class="text-left">@line.Product.Name</td>
-                <td class="text-right">@line.Product.Price</td>
+                <td class="text-right">@line.Product.Price.ToString("c")</td>
                 <td class="text-right">
                     @((line.Quantity * line.Product.Price).ToString("c"))
                 </td>
@@ -35,5 +34,6 @@
 </table>
 
 <div class="text-center">
-    <a class="btn btn-primary" href="@Model.ReturnUrl">Continue Shopping!</a>
+    <a class="btn btn-primary" href="@Model.ReturnUrl">Continue shopping!</a>
 </div>
+

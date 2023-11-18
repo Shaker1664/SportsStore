@@ -11,10 +11,6 @@ namespace SportsStore.Components
         {
             this.repository = repository;
         }
-        //public string Invoke()
-        //{
-        //    return "Hello From Navigation Component";
-        //}
 
         public IViewComponentResult Invoke()
         {
