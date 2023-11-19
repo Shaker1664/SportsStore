@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SportsStore.Contracts;
 using SportsStore.Extensions;
 using SportsStore.Helpers;
@@ -14,6 +11,8 @@ builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddRazorPages();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+builder.Services.AddScoped(c => SessionCart.GetCart(c));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 
